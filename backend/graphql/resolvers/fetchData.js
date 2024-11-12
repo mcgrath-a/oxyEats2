@@ -165,7 +165,7 @@ const testEmailSending = async () => {
     const menuHtml = formatMenuAsHtml(menu);
 
     console.log("Sending test email...");
-    await sendMenuEmail("yourtestemail@example.com", menuHtml);
+    await sendMenuEmail("mcgratha@oxy.edu", menuHtml);
     console.log("Test email sent successfully.");
   } catch (error) {
     console.error("Failed to send test email:", error);
