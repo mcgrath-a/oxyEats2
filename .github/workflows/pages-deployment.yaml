@@ -12,6 +12,7 @@ jobs:
       # Run your project's build step
       # - name: Build
       #   run: npm install && npm run build
+      #test
       - name: Publish
         uses: cloudflare/pages-action@v1
         with:
