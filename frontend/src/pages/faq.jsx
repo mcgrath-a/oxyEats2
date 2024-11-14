@@ -74,9 +74,9 @@ export default function FAQ() {
       </header>
       <section className="section">
         <div className="container">
-          <h1 style={{ textAlign: "center" }}> 
-            Frequently Asked Questions (FAQ) 
-            {/* // may change to 'Help' section */} 
+          <h1 style={{ textAlign: "center" }}>
+            Frequently Asked Questions (FAQ)
+            {/* // may change to 'Help' section */}
           </h1>
           {/* Embed YouTube Video */}
           <div
@@ -84,8 +84,8 @@ export default function FAQ() {
             style={{ textAlign: "center", padding: "20px" }}
           >
             <iframe
-              style={{ width: "100%", height: "315px", maxWidth: "660px" }} // Responsive width and maximum width set
-              src="https://www.youtube.com/embed/jfKfPfyJRdk?si=j9wVli1GoZvXqR6Y" 
+              style={{ width: "100%", height: "315px", maxWidth: "660px" }} // Responsive width and maximum width set test
+              src="https://www.youtube.com/embed/jfKfPfyJRdk?si=j9wVli1GoZvXqR6Y"
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
