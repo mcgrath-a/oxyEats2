@@ -44,7 +44,7 @@ const BannerTime = ({ title }) => {
                 fontSize: '16px',
                 color: 'gray'
             }} className="label theme-color">
-                Start Time From
+                #1 Start Time From (opening hours)
             </div>
             <input
                 value= {getHHMM(timing.startTimeOne)}
@@ -60,7 +60,7 @@ const BannerTime = ({ title }) => {
                 fontSize: '16px',
                 color: 'gray'
             }} className="label theme-color">
-                 Start Time To
+                 #1 Start Time To 
             </div>
             <input
                 value= {getHHMM(timing.startTimeTwo)}
@@ -78,7 +78,7 @@ const BannerTime = ({ title }) => {
                 fontSize: '16px',
                 color: 'gray'
             }} className="label theme-color">
-                End Time From
+                #2 End Time From (closing hours)
             </div>
             <input
                 value= {getHHMM(timing.endTimeOne)}
@@ -94,7 +94,7 @@ const BannerTime = ({ title }) => {
                 fontSize: '16px',
                 color: 'gray'
             }} className="label theme-color">
-                End Time To
+                #2 End Time To
             </div>
             <input
                 value= {getHHMM(timing.endTimeTwo)}

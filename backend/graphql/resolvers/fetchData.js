@@ -4,9 +4,9 @@ const cron = require("node-cron");
 const { getAllSubscription } = require("../resolvers/subscription");
 const nodemailer = require("nodemailer");
 const MenuModal = require("../../models/menu");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const EMAIL_PASS = "tekykoejdjjbbsha";
+const EMAIL_PASS = "teky koej djjb bsha";
 const EMAIL_USER = "mcgratha@oxy.edu";
 
 const transporter = nodemailer.createTransport({
@@ -146,7 +146,6 @@ const scrapeMenuData = async (req) => {
     return menu;
   }
 };
-
 
 // Ensure this connection setup runs before any database operations
 
