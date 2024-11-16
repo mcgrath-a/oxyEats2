@@ -4,7 +4,6 @@ const cron = require("node-cron");
 const { getAllSubscription } = require("../resolvers/subscription");
 const nodemailer = require("nodemailer");
 const MenuModal = require("../../models/menu");
-const mongoose = require("mongoose");
 
 const EMAIL_PASS = "teky koej djjb bsha";
 const EMAIL_USER = "mcgratha@oxy.edu";
@@ -52,26 +51,54 @@ const formatMenuAsHtml = (menu) => {
   return htmlContent;
 };
 
+const getSevenDaysMenu = async () => {
+  let lastSevenRecords = await MenuModal.find({});
+  lastSevenRecords = lastSevenRecords.reverse();
+  lastSevenRecords = lastSevenRecords.slice(0, 7);
+  return lastSevenRecords.reverse();
+};
+
 const customMenu = async () => {
   try {
     // Step 1: Scrape the menu data
-    const menu = await scrapeMenuData();
+    const menu = await getSevenDaysMenu();
 
     // Step 2: Get the subscribed users
     const subscribedUsers = await getAllSubscription();
 
     if (subscribedUsers.length) {
-      // Step 3: Send menu to each subscribed user
-      subscribedUsers.forEach(async (user) => {
-        await sendMenuEmail(user.newsEmail, menu);
-      });
+      // Step 3: Send menu emails to all subscribed users
+      const emailPromises = subscribedUsers.map((user) =>
+        sendMenuEmail(user.newsEmail, menu).catch((error) => {
+          console.error(
+            `Failed to send email to ${user.newsEmail}:`,
+            error.message
+          );
+        })
+      );
+
+      // Wait for all email operations to complete
+      const results = await Promise.allSettled(emailPromises);
+
+      // Optional: Log the results summary
+      const successCount = results.filter(
+        (result) => result.status === "fulfilled"
+      ).length;
+      const failedCount = results.filter(
+        (result) => result.status === "rejected"
+      ).length;
+
+      console.log(
+        `Email process completed: ${successCount} succeeded, ${failedCount} failed.`
+      );
     }
   } catch (error) {
     console.error("Error occurred while sending menu emails: ", error);
   }
 };
 
-cron.schedule("0 8 * * 4", async () => {
+cron.schedule("0 1 * * 2", async () => {
+  // monday at 1 AM
   await customMenu();
 });
 
@@ -143,37 +170,9 @@ const scrapeMenuData = async (req) => {
       }
     }
 
-    return menu;
+    const menusData = await MenuModal.find({});
+    return menusData;
   }
 };
-
-// Ensure this connection setup runs before any database operations
-
-// Test Email Function
-const testEmailSending = async () => {
-  try {
-    // Mock the req object as needed for scrapeMenuData
-    const req = {
-      query: {
-        date: new Date().toISOString().split("T")[0], // Use current date in ISO format (YYYY-MM-DD)
-      },
-    };
-
-    console.log("Fetching menu data...");
-    const menu = await scrapeMenuData(req); // Pass the mock req object
-    const menuHtml = formatMenuAsHtml(menu);
-
-    console.log("Sending test email...");
-    await sendMenuEmail("mcgratha@oxy.edu", menuHtml);
-    console.log("Test email sent successfully.");
-  } catch (error) {
-    console.error("Failed to send test email:", error);
-  }
-};
-
-// Conditional Call or Scheduled Job for Test
-if (process.argv.includes("--test-email")) {
-  testEmailSending();
-}
 
 module.exports = { scrapeMenuData, customMenu };

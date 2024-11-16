@@ -155,6 +155,17 @@ export default function Menu({
     }
   };
 
+  const [allCollapsed, setAllCollapsed] = useState(true);
+
+  const toggleAllMenus = () => {
+    if (allCollapsed) {
+      setOpenMenu(menus[dataIndex]?.data?.map((_, index) => index)); // Open all
+    } else {
+      setOpenMenu([]); // Collapse all
+    }
+    setAllCollapsed(!allCollapsed);
+  };
+
   useEffect(() => {
     if (new Date().getDay() === dayToFetch) {
       dispatch(scrapeMenus());
@@ -186,7 +197,8 @@ export default function Menu({
       setDuration("");
       const searchingData = [];
 
-      menus?.forEach((mainobj) => {
+      menus?.slice(-7).forEach((mainobj) => {
+        /* only last 7 days  */
         mainobj.data.forEach((mealObj) => {
           mealObj.foods.forEach((item) => {
             if (item.toLowerCase().includes(searchText?.toLowerCase())) {
@@ -246,9 +258,8 @@ export default function Menu({
           <>
             <div className=" w-100 d-flex flex-col gap-2 border  p-2 border-circular">
               <div className="d-flex justify-content-end mt-2 mb-4 w-100">
-                {/* {adminLogin && 
-                  <Button className="mx-2 dayWeek-selected" onClick={() => setMenuUpdateModal(!menuUpdateModal)}>Add</Button>
-                } */}
+                <div className="w-100 d-flex justify-content-end my-2"></div>
+
                 <input
                   onKeyDown={handleKeyDown}
                   value={searchText}
@@ -288,7 +299,9 @@ export default function Menu({
                 >
                   WEEK
                 </div>
+                <div className="d-flex justify-content-center my-2"></div>
               </div>
+
               {searching && (
                 <>
                   {searchedData ? (
@@ -342,7 +355,8 @@ export default function Menu({
                           className="text text-center my-4"
                           style={{ color: "rgba(252,114,76,255)" }}
                         >
-                          No any food item Found!
+                          Food item not found!
+                          {/* "No any found item found"  */}
                         </p>
                       )}
                     </>
@@ -389,8 +403,7 @@ export default function Menu({
                         fontSize: "20px",
                       }}
                     >
-                      {menus[dataIndex]?.date}, {dayjs().format("YYYY")} |{" "}
-                      {menus[dataIndex]?.day}
+                      {menus[dataIndex]?.date} | {menus[dataIndex]?.day}
                     </div>
                     {dataIndex < menus.length - 1 && (
                       <div
@@ -409,6 +422,27 @@ export default function Menu({
                       </div>
                     )}
                   </div>
+                  <div
+                    className="d-flex justify-content-center"
+                    style={{ marginBottom: "1px" }} // Reduce margin below the button
+                  >
+                    <button
+                      onClick={toggleAllMenus}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "grey",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        marginBottom: "-40px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      {allCollapsed ? "Expand All" : "Collapse All"}
+                    </button>
+                  </div>
+
                   <div
                     style={{ maxWidth: "700px", width: "100%" }}
                     className=" my-5 text text-black mx-auto"
@@ -535,30 +569,70 @@ export default function Menu({
 
               {duration === "week" && (
                 <>
+                  {/* Display the date of the selected day */}
                   <div
-                    style={{ gap: "20px" }}
+                    style={{
+                      textAlign: "center",
+                      fontSize: "20px",
+                      marginTop: "40px",
+                      marginBottom: "-20px",
+                    }}
+                    className="theme-color"
+                  >
+                    {menus[dataIndex]?.date} | {menus[dataIndex]?.day}
+                  </div>
+
+                  <div
+                    style={{
+                      gap: "20px",
+                    }}
                     className="w-100 mt-5 d-flex justify-content-center flex-wrap align-items-center flex-row"
                   >
-                    {menus?.map((obj, index) => (
-                      <div
-                        style={{ borderRadius: "40px" }}
-                        onClick={() => {
-                          setOpenMenu([0]);
-                          setDataIndex(index);
-                        }}
-                        className={`p-2 text-center day-option ${
-                          dataIndex === index ? "dayWeek-selected" : ""
-                        } `}
-                      >
-                        {obj.day}
-                      </div>
-                    ))}
+                    {menus
+                      ?.slice(-7) // last 7 days
+                      .map((obj, index) => (
+                        <div
+                          key={index}
+                          style={{ borderRadius: "40px" }}
+                          onClick={() => {
+                            setOpenMenu([0]);
+                            setDataIndex(menus.length - 7 + index); // asjust index based on slicing
+                          }}
+                          className={`p-2 text-center day-option ${
+                            dataIndex === menus.length - 7 + index
+                              ? "dayWeek-selected"
+                              : ""
+                          } `}
+                        >
+                          {obj.day}
+                        </div>
+                      ))}
+                  </div>
+                  <div
+                    className="d-flex justify-content-center"
+                    style={{ marginBottom: "1px" }} // Reduce margin below the button
+                  >
+                    <button
+                      onClick={toggleAllMenus}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "grey",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                        marginBottom: "-40px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      {allCollapsed ? "Expand All" : "Collapse All"}
+                    </button>
                   </div>
                   <div
                     style={{ maxWidth: "700px", width: "100%" }}
-                    className=" my-5 text text-black mx-auto"
+                    className="my-5 text text-black mx-auto"
                   >
-                    {menus[dataIndex].data?.map((foodInfo, index) => (
+                    {menus[dataIndex]?.data?.map((foodInfo, index) => (
                       <>
                         <div
                           key={index}
@@ -573,7 +647,7 @@ export default function Menu({
                             openMenu.includes(index)
                               ? "bg-orange text-white"
                               : "bg-lightdark text-black"
-                          }   align-items-center p-2 border-bottom border-secondary`}
+                          } align-items-center p-2 border-bottom border-secondary`}
                         >
                           <p
                             className={`${
@@ -619,18 +693,6 @@ export default function Menu({
                                     __html: `○ <b>${food.split("-")[0]}</b>${
                                       food.split("-")[1]
                                         ? ` - ${food.split("-")[1]}`
-                                        : ""
-                                    }${
-                                      food.split("-")[2]
-                                        ? ` - ${food.split("-")[2]}`
-                                        : ""
-                                    }${
-                                      food.split("-")[3]
-                                        ? ` - ${food.split("-")[3]}`
-                                        : ""
-                                    }${
-                                      food.split("-")[4]
-                                        ? ` - ${food.split("-")[4]}`
                                         : ""
                                     }`,
                                   }}
