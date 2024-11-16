@@ -44,7 +44,7 @@ export default function Sidebar({
     "Favorite Insights",
     "Banner Timing",
     "Menus",
-    "Add menu",
+    "Add Menu Item",
   ];
 
   const currentTabHandler = (index) => {
