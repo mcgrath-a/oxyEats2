@@ -5,7 +5,7 @@ const { getAllSubscription } = require("../resolvers/subscription");
 const nodemailer = require("nodemailer");
 const MenuModal = require("../../models/menu");
 
-const EMAIL_PASS = "teky koej djjb bsha";
+const EMAIL_PASS = "tekykoejdjjbbsha";
 const EMAIL_USER = "mcgratha@oxy.edu";
 
 const transporter = nodemailer.createTransport({
