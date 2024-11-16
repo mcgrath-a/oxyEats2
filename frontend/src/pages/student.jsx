@@ -114,7 +114,7 @@ export default function Student() {
               className=" my-1 mb-3 cursor-pointer w-100  text text-black border-circular"
               onClick={() => setUpdateModal(true)}
             >
-               <strong> Hi,{userDetails?.fullName} 😊</strong>
+               <strong> Hi, {userDetails?.fullName} 😊</strong>
             </div>
             {studentItems.map((item, index) => (
               <div

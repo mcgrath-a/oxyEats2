@@ -21,7 +21,7 @@ const sendMenuEmail = async (email, menu) => {
   const mailOptions = {
     from: EMAIL_USER,
     to: email,
-    subject: "Weekly MP Menu - Subscribition",
+    subject: "Weekly MP Menu - Subscription",
     html: menuHtml,
   };
 

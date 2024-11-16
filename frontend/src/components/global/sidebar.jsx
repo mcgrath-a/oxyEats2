@@ -34,9 +34,9 @@ export default function Sidebar({
   const studentItems = [
     "Student Dashboard",
     "Favorite Items",
-    "User Preferences",
     "Newsletter",
     "Feedback Form",
+    "User Preferences",
   ];
   const adminItems = [
     "Dashboard",

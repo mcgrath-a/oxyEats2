@@ -9,9 +9,8 @@ import {
 import axios from "axios"; // To send the confirmation email
 
 const Newsletter = () => {
-  // console.log("Newsletter component rendered"); // Debug log
   const [newsletterMessage, setNewsletterMessage] = useState(
-    "The Newsletter Message will appear here"
+    "Weekly Menu's sent Monday in the A.M."
   );
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -29,23 +28,6 @@ const Newsletter = () => {
   useEffect(() => {
     getSubscriptionHandler();
   }, []);
-  <Button
-    onClick={(e) => {
-      console.log("Button clicked"); // Debug log
-      handleSubscriptionToggle(e);
-    }}
-    color={isSubscribed ? "danger" : "success"}
-  >
-    {isSubscribed ? (
-      <>
-        <FaEnvelopeOpenText style={{ marginRight: "5px" }} /> Unsubscribe
-      </>
-    ) : (
-      <>
-        <FaEnvelope style={{ marginRight: "5px" }} /> Subscribe
-      </>
-    )}
-  </Button>;
 
   const handleSubscriptionToggle = async (e) => {
     e.preventDefault();
@@ -62,13 +44,11 @@ const Newsletter = () => {
       console.log("Subscribing user...");
       try {
         const response = await subscribeApi();
-        console.log("Response from subscribeApi:", response); // Debug log
+        console.log("Response from subscribeApi:", response);
 
-        // Check the structure of the response
         if (response?.data?.email) {
           console.log("Email fetched from response:", response.data.email);
 
-          // Send confirmation email
           console.log("Sending confirmation email...");
           await axios.post("/api/send-confirmation-email", {
             email: response.data.email,
@@ -94,15 +74,18 @@ const Newsletter = () => {
           </div>
         </Col>
       </Row>
-      <Row className="align-items-end justify-content-end">
-        <Col xs="12" md="6" className="my-2 d-flex justify-content-center">
-          <h5 className="news-text">Subscribe/Unsubscribe Newsletter</h5>
-        </Col>
-        <Col xs="12" md="6" className="my-2 d-flex justify-content-center">
+      <Row className="align-items-center justify-content-center">
+        <Col xs="12" md="6" className="my-3 text-center">
+          <h5 className="news-text mb-3">
+            Curious to know what is on the menu for the week? Sign up for Menu
+            Mail to receive a weekly menu from OxyEats to your email.
+          </h5>
+          <br>
+          {/* break in line the old fashioned way */}
+          </br>
           <Button
             onClick={handleSubscriptionToggle}
             color={isSubscribed ? "danger" : "success"}
-            className="ml-2"
           >
             {isSubscribed ? (
               <>
