@@ -41,7 +41,7 @@ export default function FAQ() {
         "Favorite Insights",
         "Banner Timing",
         "Menus",
-        "Add menu",
+        "Add Menu Item",
       ]);
     }
   }, [credentials]);

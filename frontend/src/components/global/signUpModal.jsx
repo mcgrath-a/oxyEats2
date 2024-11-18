@@ -60,7 +60,7 @@ export default function SignupModal({ signupModal, setSignupModal }) {
                                 fontSize: '16px',
                                 color: 'gray'
                             }} className="label theme-color">
-                                Full Name
+                                First Name
                             </div>
                             <input
                                 value={fullName}

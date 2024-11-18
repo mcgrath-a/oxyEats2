@@ -25,10 +25,10 @@ const UserFeedback = () => {
               width: "150%", // Full width of the parent container
               height: "1200px",
               border: "none",
-              display: 'block', // Ensures the iframe behaves like a block element
-              margin: '0 auto', // Centers the iframe
-              position: 'relative', // Ensures centering aligns with the parent
-              left: '-25%', // Offset by half of the extra width (50%)
+              display: "block", // Ensures the iframe behaves like a block element
+              margin: "0 auto", // Centers the iframe
+              position: "relative", // Ensures centering aligns with the parent
+              left: "-25%", // Offset by half of the extra width (50%)
             }}
           ></iframe>
         </Col>
