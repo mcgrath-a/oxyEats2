@@ -23,6 +23,8 @@ import { Button } from "reactstrap";
 import MenuModal from "../global/menuModal";
 import { setCurrentTab } from "../../store/sidebarTabsSlice";
 import { useNavigate } from "react-router-dom";
+import jsPDF from "jspdf"; // Import jsPDF
+import { FaFilePdf } from "react-icons/fa6"; // Import the PDF icon
 
 const dayToFetch = 0; // 0 is Sunday 6 is Saturday
 
@@ -229,6 +231,67 @@ export default function Menu({
     dispatch(fetchMenus());
   };
 
+  const decodeHtmlEntities = (str) => {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = str;
+    return textarea.value;
+  };
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    const relevantMenus = menus.slice(-7); // Get the last 7 days
+    const firstMenuDate = relevantMenus[0]?.date || "Start Date";
+    const lastMenuDate =
+      relevantMenus[relevantMenus.length - 1]?.date || "End Date";
+    doc.setFont("helvetica", "bold"); // Set the font to bold
+    doc.text(`Weekly Menu: ${firstMenuDate} to ${lastMenuDate}`, 10, 10); // Dynamic Title
+    doc.setFont("helvetica", "normal"); // Reset the font to normal after the title
+
+    let yPosition = 20; // Start below the title
+    const pageWidth = 190; // Account for margins (210mm page width - 10mm x 2 margins)
+
+    menus?.slice(-7)?.forEach((menu, menuIndex) => {
+      doc.setFontSize(14);
+      doc.text(`${menu.date} | ${menu.day}`, 10, yPosition);
+      yPosition += 10; // Add spacing below the date/day
+
+      menu.data.forEach((meal) => {
+        doc.setFontSize(12);
+        doc.text(`${meal.meal}:`, 10, yPosition);
+        yPosition += 8; // Add spacing below the meal
+
+        meal.foods.forEach((food) => {
+          doc.setFontSize(10);
+
+          // Decode HTML entities and split text to fit the page width
+          const decodedFood = decodeHtmlEntities(food);
+          const lines = doc.splitTextToSize(decodedFood, pageWidth);
+          lines.forEach((line) => {
+            doc.text(line, 15, yPosition);
+            yPosition += 6; // Add spacing for each wrapped line
+          });
+
+          // Prevent writing beyond page limits
+          if (yPosition > 280) {
+            doc.addPage(); // Add new page
+            yPosition = 20; // Reset yPosition for the new page
+          }
+        });
+      });
+
+      yPosition += 10; // Add extra spacing after each day's menu
+    });
+
+    // Convert the PDF to a Blob
+    const pdfBlob = doc.output("blob");
+
+    // Create a URL for the Blob and open it in a new tab
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl, "_blank");
+  };
+
   return (
     <>
       {/* {menuUpdateModal && !loading &&
@@ -259,6 +322,22 @@ export default function Menu({
             <div className=" w-100 d-flex flex-col gap-2 border  p-2 border-circular">
               <div className="d-flex justify-content-end mt-2 mb-4 w-100">
                 <div className="w-100 d-flex justify-content-end my-2"></div>
+
+               
+                <button
+                  onClick={generatePDF}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                    marginRight: "10px",
+                  }}
+                  title="Download Weekly Menu"
+                >
+                  <FaFilePdf style={{ color: "grey" }} />
+                </button>
+               
 
                 <input
                   onKeyDown={handleKeyDown}
@@ -529,6 +608,7 @@ export default function Menu({
                                         onClick={() => toggleFavorite(food)}
                                         style={{ cursor: "pointer" }}
                                       />
+                                      
                                     )
                                   ) : null}
                                   <div className="ml-3">
