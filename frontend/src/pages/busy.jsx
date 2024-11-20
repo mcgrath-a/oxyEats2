@@ -75,67 +75,34 @@ export default function FAQ() {
       <section className="section">
         <div className="container">
           <h1 style={{ textAlign: "center" }}>
-            Help / User Tutorial
+            Busyness
             {/* // may change to 'Help' section */}
           </h1>
           {/* Embed YouTube Video */}
+          <p>
+            <p style={{ textAlign: "center", fontSize: "20px" }}>
+              <span style={{ color: "red", fontWeight: "bold" }}>Red</span>{" "}
+              indicates that the MP is very busy.{" "}
+              <span style={{ color: "orange", fontWeight: "bold" }}>
+                Yellow
+              </span>{" "}
+              indicates moderate activity.{" "}
+              <span style={{ color: "green", fontWeight: "bold" }}>Green</span>{" "}
+              signifies that the MP is less busy or has minimal activity.
+            </p>
+          </p>
           <div
             className="video-container"
             style={{ textAlign: "center", padding: "20px" }}
           >
             <iframe
-              style={{ width: "100%", height: "315px", maxWidth: "470px" }} // Responsive width and maximum width set test
-              src="https://www.youtube.com/embed/LcDJfjP8R74?si=gaL4aPtQixkI4XQl"
+              style={{ width: "100%", height: "875px", maxWidth: "1060px" }} // Responsive width and maximum width set test
+              src="https://grafana.csc.oxy.edu/public-dashboards/eaa288a214ee454589632e228e58772d?orgId=1"
               title="YouTube video player"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-              allowfullscreen
+              scrol="no"
             ></iframe>
-            <div style={{ marginTop: "20px" }}>
-              <h5>Video Highlights</h5>
-              <p>
-                {" "}
-                <i>
-                  See below for timestamps of different actions and key moments
-                  in the video that highlight specific features and
-                  instructions.
-                </i>{" "}
-              </p>
-              <br></br>
-              <ul>
-                <li>
-                  <strong>0:15</strong> - Landing page naviagtion
-                </li>
-                <li>
-                  <strong>0:41</strong> - Expand/Collapse all sections
-                </li>
-                <li>
-                  <strong>0:52</strong> - Search functionality & results
-                </li>
-                <li>
-                  <strong>1:12</strong> - Download & print weekly menu
-                </li>
-                <li>
-                  <strong>1:32</strong> - MP Hours status
-                </li>
-                <li>
-                  <strong>1:42</strong> - Busyness: view crowdedness of MP at
-                  current time
-                </li>
-                <li>
-                  <strong>2:10</strong> - Logging In
-                </li>
-                <li>
-                  <strong>2:24</strong> - Student Dashboard Landing page
-                </li>
-                <li>
-                  <strong>2:38</strong> - Student Dashboard side panel tabs
-                </li>
-                <li>
-                  <strong>2:57</strong> - Dark & Light mode
-                </li>
-              </ul>
-            </div>
+            <div style={{ marginTop: "20px" }}></div>
           </div>
         </div>
       </section>

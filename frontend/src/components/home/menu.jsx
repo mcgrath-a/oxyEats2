@@ -99,7 +99,7 @@ export default function Menu({
         }
       }
     };
-
+    console.bannerMessage;
     // Initial check and set interval to check every minute
 
     let intervalId;
@@ -167,6 +167,85 @@ export default function Menu({
     }
     setAllCollapsed(!allCollapsed);
   };
+
+  const isMarketplaceOpen = () => {
+    const currentDay = dayjs().day(); // 0 (Sunday) to 6 (Saturday)
+    const currentTime = dayjs();
+
+    // Define schedules
+    const weekdayStart = dayjs()
+      .set("hour", 7)
+      .set("minute", 30)
+      .set("second", 0); // 7:30 AM
+    const weekdayEnd = dayjs()
+      .set("hour", 19)
+      .set("minute", 30)
+      .set("second", 0); // 7:30 PM
+    const saturdayStart = dayjs()
+      .set("hour", 10)
+      .set("minute", 0)
+      .set("second", 0); // 10:00 AM
+    const saturdayEnd = dayjs()
+      .set("hour", 14)
+      .set("minute", 0)
+      .set("second", 0); // 12:00 PM
+    const sundayStart = dayjs()
+      .set("hour", 10)
+      .set("minute", 0)
+      .set("second", 0); // 10:00 AM
+    const sundayEnd = dayjs()
+      .set("hour", 17)
+      .set("minute", 30)
+      .set("second", 0); // 4:00 PM
+
+    // Log the current time
+    //console.log("Current Time:", currentTime.format("YYYY-MM-DD HH:mm:ss"));
+
+    if (currentDay >= 1 && currentDay <= 5) {
+      // Monday-Friday
+      const isOpen =
+        currentTime.isAfter(weekdayStart) && currentTime.isBefore(weekdayEnd);
+      tooltip: `Weekday Hours: ${weekdayStart.format(
+        "hh:mm A"
+      )} - ${weekdayEnd.format("hh:mm A")}`;
+
+      return isOpen;
+    } else if (currentDay === 6) {
+      // Saturday
+      const isOpen =
+        currentTime.isAfter(saturdayStart) && currentTime.isBefore(saturdayEnd);
+
+      return {
+        isOpen: false,
+        tooltip: "The MP is currently ",
+      };
+    } else if (currentDay === 0) {
+      // Sunday
+      const isOpen =
+        currentTime.isAfter(sundayStart) && currentTime.isBefore(sundayEnd);
+
+      return {
+        isOpen: false,
+        tooltip: "The MP is currently ",
+      };
+    }
+    return false; // Default to closed if none of the conditions match
+  };
+
+  const [isOpen, setIsOpen] = useState(isMarketplaceOpen());
+  const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const status = isMarketplaceOpen();
+      setIsOpen(status);
+
+      // Log the current open/closed status
+      //console.log(`Marketplace is now: ${status ? "Open" : "Closed"}`);
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, []);
 
   useEffect(() => {
     if (new Date().getDay() === dayToFetch) {
@@ -311,9 +390,17 @@ export default function Menu({
         <div className="features-text section-header text-center">
           <div>
             <h2 className="section-title">Marketplace Menu</h2>
-            <div className="desc-text">
-              <p>Want to know what’s to eat? You’ve come to the right place.</p>
-            </div>
+
+            <p
+              
+              style={{
+                color: isOpen ? "green" : "red",
+                fontWeight: "bold",
+                fontSize: "16px",
+              }}
+            >
+              {isOpen ? "OPEN" : "CLOSED"}
+            </p>
           </div>
         </div>
 
@@ -323,7 +410,6 @@ export default function Menu({
               <div className="d-flex justify-content-end mt-2 mb-4 w-100">
                 <div className="w-100 d-flex justify-content-end my-2"></div>
 
-               
                 <button
                   onClick={generatePDF}
                   style={{
@@ -337,7 +423,6 @@ export default function Menu({
                 >
                   <FaFilePdf style={{ color: "grey" }} />
                 </button>
-               
 
                 <input
                   onKeyDown={handleKeyDown}
@@ -608,7 +693,6 @@ export default function Menu({
                                         onClick={() => toggleFavorite(food)}
                                         style={{ cursor: "pointer" }}
                                       />
-                                      
                                     )
                                   ) : null}
                                   <div className="ml-3">

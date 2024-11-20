@@ -17,7 +17,7 @@ const UserFeedback = () => {
         </Col>
         <Col xs="12" className="my-3" style={{ padding: 0 }}>
           <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLScmrPPfQZPxnebtTiRhOJefYcoZoNH70ta8iLSk1GKu7HJp4A/viewform?embedded=true"
+            src="https://docs.google.com/forms/d/e/1FAIpQLSd6D5vFjgrQ6evHORqwt5iVS53Y5SCDva2tP-FE74ROTZAgBQ/viewform?embedded=true"
             frameborder="0"
             marginheight="0"
             marginwidth="0"

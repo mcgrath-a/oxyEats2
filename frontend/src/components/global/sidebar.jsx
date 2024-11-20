@@ -30,6 +30,7 @@ export default function Sidebar({
   const menuItems = [
     { name: "Menu", route: "/" },
     { name: "FAQ", route: "/faq" },
+    { name: "Busy", route: "/busy" },
   ];
   const studentItems = [
     "Student Dashboard",
@@ -43,7 +44,7 @@ export default function Sidebar({
     "Rating Insights",
     "Favorite Insights",
     "Banner Timing",
-    "Menus",
+    "Menu",
     "Add Menu Item",
   ];
 
@@ -87,7 +88,7 @@ export default function Sidebar({
       }`}
     >
       <div className="d-flex flex-col align-items-center mx-3">
-        {path === "/" || path === "/faq" ? (
+        {path === "/" || path === "/faq" || path === "/busy" ? (
           <>
             <div
               style={{ fontSize: "22px" }}

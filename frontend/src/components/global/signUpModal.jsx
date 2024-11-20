@@ -45,7 +45,7 @@ export default function SignupModal({ signupModal, setSignupModal }) {
       setPassword("");
       setConfirmPassword("");
       setFullName("");
-      toast.success("Sign up successfully");
+      toast.success("Sign up successfull");
       setSuccessModal(true);
     } catch (error) {
       console.error("Signup failed", error);
