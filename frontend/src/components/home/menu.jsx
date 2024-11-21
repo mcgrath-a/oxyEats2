@@ -10,6 +10,8 @@ import {
   FaRegStar,
 } from "react-icons/fa6"; // Import star icons
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { toast } from "react-toastify";
 import {
   addFavorite,
@@ -191,10 +193,11 @@ export default function Menu({
   }, []);
 
   // Determine if the marketplace is open based on operating hours
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
   const isMarketplaceOpen = () => {
     const currentDay = dayjs().format("dddd"); // Get the current day as a string (e.g., "Monday")
-    const currentTime = dayjs(); // Current date and time
-
+    const currentTime = dayjs().tz("America/Los_Angeles"); // Replace with your timezone
     console.log("Current Day:", currentDay);
     console.log("Current Time:", currentTime.format("YYYY-MM-DD HH:mm"));
 
