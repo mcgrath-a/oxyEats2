@@ -16,6 +16,7 @@ import {
   getUserFavorite,
   removeFavorite,
 } from "../../APIs/favourite";
+import { getFoodNames } from "../../utilities";
 import { getOperatingHours } from "../../APIs/operatingHours"; // Import operating hours API
 import { getBannerTiming } from "../../APIs/banner";
 import { scrapeMenus, fetchMenus, updateMenusApi } from "../../store/menuSlice";
