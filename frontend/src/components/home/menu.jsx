@@ -192,6 +192,9 @@ export default function Menu({
     fetchOperatingHours();
   }, []);
 
+  //console.log("Device Time:", new Date().toString());
+  //console.log("Device Time in UTC:", new Date().toISOString());
+  
   // Determine if the marketplace is open based on operating hours
   dayjs.extend(utc);
   dayjs.extend(timezone);
