@@ -11,16 +11,18 @@ import Menu from "../components/home/menu";
 import MenuModal from "../components/global/menuModal";
 import { fetchMenus, updateMenusApi } from "../store/menuSlice";
 import AdminOperatingHours from "../components/global/operatingHours.jsx"; // Import the new component
+import AdminFeedback from "./adminFeedback";
 
 export default function Admin() {
   const adminItems = [
     "Dashboard",
+    "View Menu",
     "Rating Insights",
     "Favorite Insights",
     "Banner Timing",
-    "Menu",
     "Add Menu Item",
-    "Operating Hours", // Add this new tab
+    "Operating Hours",
+    "Admin Feedback" // Add this new tab
   ];
   const currentTab = useSelector((state) => state.sideBarTabs.currentTab);
   const credentials = useSelector((state) => state.credentials.credentials);
@@ -172,6 +174,7 @@ export default function Admin() {
             <div
               style={{
                 fontSize: "22px",
+                fontWeight: "bold",
               }}
               className=" my-1 mb-3 cursor-pointer w-100  text text-black border-circular"
             >
@@ -180,7 +183,7 @@ export default function Admin() {
             {adminItems.map((item, index) => (
               <div
                 onClick={() => setTab(index)}
-                style={{ fontWeight: "bold" }}
+                //style={{ fontWeight: "bold" }}
                 className={`cursor-pointer w-100 p-2 ${
                   tab === index ? "bg-orange  text-white" : "text-black"
                 }  text border-circular`}
@@ -192,12 +195,13 @@ export default function Admin() {
         </div>
         <div style={{ padding: "10px" }} className="menuForPages">
           {tab == 0 && <UserDetails userDetails={userDetails} />}
-          {tab == 1 && <RatingInsight data={userRatings} />}
-          {tab == 2 && (
+          {tab == 1 && <Menu adminLogin={true} />}
+          {tab == 2 && <RatingInsight data={userRatings} />}
+          {tab == 3 && (
             <RatingInsight data={userFavorites} maxCount={maxCount} />
           )}
-          {tab == 3 && <BannerTime title={"Banner Timing"} />}
-          {tab == 4 && <Menu adminLogin={true} />}
+          {tab == 4 && <BannerTime title={"Banner Timing"} />}
+         
           {tab == 5 && (
             <MenuModal
               menuUpdateModal={menuUpdateModal}
@@ -207,6 +211,7 @@ export default function Admin() {
             />
           )}
           {tab == 6 && <AdminOperatingHours />}
+          {tab == 7 && <AdminFeedback />}
         </div>
       </section>
     </>

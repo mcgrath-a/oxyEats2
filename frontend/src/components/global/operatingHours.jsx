@@ -72,6 +72,10 @@ function AdminOperatingHours() {
     setEditing(true); // Set editing state to true if changes are made
   };
 
+  const ColoredText = ({ color, children }) => (
+    <span style={{ color }}>{children}</span>
+  );
+
   return (
     <div className="px-4 py-3">
       <h2
@@ -90,8 +94,9 @@ function AdminOperatingHours() {
           }}
         >
           Manage the MP hours to display the current live status in real time.
-          Update the start time in the <style color="green">green</style> box
-          and the end time in the <span className="red-text">red</span> box.
+          Update the opening times in the{" "}
+          <ColoredText color="green">green</ColoredText> box and the closing times in
+          the <ColoredText color="red">red</ColoredText> box.
         </p>
       </div>
       <br></br>
@@ -109,7 +114,7 @@ function AdminOperatingHours() {
             </Col>
 
             <Col md="4">
-              <FormGroup>
+            <FormGroup>
                 <Label for={`${hour.day}-startTime`} className="sr-only">
                   Start Time
                 </Label>
@@ -122,7 +127,7 @@ function AdminOperatingHours() {
                   }
                   style={{
                     border: "1px solid green",
-                    borderRadius: "3px", // Optional: Make the border rounded
+                    borderRadius: "5px", // Optional: Make the border rounded
                     padding: "5px", // Optional: Add some padding
                   }}
                 />

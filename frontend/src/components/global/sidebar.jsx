@@ -41,12 +41,13 @@ export default function Sidebar({
   ];
   const adminItems = [
     "Dashboard",
+    "View Menu",
     "Rating Insights",
     "Favorite Insights",
     "Banner Timing",
-    "Menu",
     "Add Menu Item",
     "Operating Hours",
+    "Admin Feedback"
   ];
 
   const currentTabHandler = (index) => {
