@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import Home from "./pages/home";
 import FAQ from "./pages/faq";
-import Busy from "./pages/busy";
+import Traffic from "./pages/busy";
 import { Toaster } from "react-hot-toast";
 import Student from "./pages/student";
 import Admin from "./pages/admin";
@@ -40,7 +40,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/faq" element={<FAQ />} />
-        <Route path="/busy" element={<Busy />} />
+        <Route path="/busy" element={<Traffic />} />
         <Route path="/student" element={<Student />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>

@@ -1,0 +1,26 @@
+export const getOperatingHoursRequestBody = () => ({
+  query: `
+    query {
+      getOperatingHours {
+        day
+        startTime
+        endTime
+      }
+    }
+  `,
+});
+
+export const updateOperatingHoursRequestBody = (day, startTime, endTime) => ({
+  query: `
+    mutation ($input: OperatingHoursInput!) {
+      updateOperatingHours(operatingHours: $input) {
+        day
+        startTime
+        endTime
+      }
+    }
+  `,
+  variables: {
+    input: { day, startTime, endTime },
+  },
+});

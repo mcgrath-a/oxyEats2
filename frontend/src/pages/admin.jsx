@@ -10,6 +10,7 @@ import BannerTime from "./banner";
 import Menu from "../components/home/menu";
 import MenuModal from "../components/global/menuModal";
 import { fetchMenus, updateMenusApi } from "../store/menuSlice";
+import AdminOperatingHours from "../components/global/operatingHours.jsx"; // Import the new component
 
 export default function Admin() {
   const adminItems = [
@@ -19,6 +20,7 @@ export default function Admin() {
     "Banner Timing",
     "Menu",
     "Add Menu Item",
+    "Operating Hours", // Add this new tab
   ];
   const currentTab = useSelector((state) => state.sideBarTabs.currentTab);
   const credentials = useSelector((state) => state.credentials.credentials);
@@ -116,8 +118,12 @@ export default function Admin() {
       const scrollPosition = window.scrollY;
       const backToTopButton = document.querySelector(".back-to-up");
 
+      if (!backToTopButton) {
+        console.warn("Element with class 'back-to-up' not found.");
+        return;
+      }
+
       if (scrollPosition > 300) {
-        // Adjust the scroll threshold as needed
         backToTopButton.style.display = "flex";
       } else {
         backToTopButton.style.display = "none";
@@ -188,11 +194,7 @@ export default function Admin() {
           {tab == 0 && <UserDetails userDetails={userDetails} />}
           {tab == 1 && <RatingInsight data={userRatings} />}
           {tab == 2 && (
-            <RatingInsight
-
-              data={userFavorites}
-              maxCount={maxCount}
-            />
+            <RatingInsight data={userFavorites} maxCount={maxCount} />
           )}
           {tab == 3 && <BannerTime title={"Banner Timing"} />}
           {tab == 4 && <Menu adminLogin={true} />}
@@ -204,6 +206,7 @@ export default function Admin() {
               onUpdate={onUpdate}
             />
           )}
+          {tab == 6 && <AdminOperatingHours />}
         </div>
       </section>
     </>

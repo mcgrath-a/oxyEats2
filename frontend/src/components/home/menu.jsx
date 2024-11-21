@@ -16,7 +16,7 @@ import {
   getUserFavorite,
   removeFavorite,
 } from "../../APIs/favourite";
-import { getFoodNames } from "../../utilities";
+import { getOperatingHours } from "../../APIs/operatingHours"; // Import operating hours API
 import { getBannerTiming } from "../../APIs/banner";
 import { scrapeMenus, fetchMenus, updateMenusApi } from "../../store/menuSlice";
 import { Button } from "reactstrap";
@@ -51,6 +51,8 @@ export default function Menu({
   const [favorites, setFavorites] = useState([]);
   const [showBanner, setShowBanner] = useState(false);
   const [bannerMessage, setBannerMessage] = useState("");
+  const [operatingHours, setOperatingHours] = useState([]); // State for operating hours
+  const [isOpen, setIsOpen] = useState(false);
   const [timing, setTiming] = useState({
     startTimeOne: "",
     endTimeOne: "",
@@ -99,6 +101,7 @@ export default function Menu({
         }
       }
     };
+    console.endTimeText;
     console.bannerMessage;
     // Initial check and set interval to check every minute
 
@@ -167,85 +170,91 @@ export default function Menu({
     }
     setAllCollapsed(!allCollapsed);
   };
+  // Reset expand/collapse state when navigating to a new day
+  useEffect(() => {
+    setAllCollapsed(true); // Reset to collapsed
+    setOpenMenu([0]); // Ensure all menus are closed
+  }, [dataIndex]);
 
+  // Fetch operating hours on mount
+  useEffect(() => {
+    const fetchOperatingHours = async () => {
+      try {
+        const { data } = await getOperatingHours();
+        setOperatingHours(data); // Set operating hours from backend
+      } catch (error) {
+        console.error("Failed to fetch operating hours:", error);
+      }
+    };
+    fetchOperatingHours();
+  }, []);
+
+  // Determine if the marketplace is open based on operating hours
   const isMarketplaceOpen = () => {
-    const currentDay = dayjs().day(); // 0 (Sunday) to 6 (Saturday)
-    const currentTime = dayjs();
+    const currentDay = dayjs().format("dddd"); // Get the current day as a string (e.g., "Monday")
+    const currentTime = dayjs(); // Current date and time
 
-    // Define schedules
-    const weekdayStart = dayjs()
-      .set("hour", 7)
-      .set("minute", 30)
-      .set("second", 0); // 7:30 AM
-    const weekdayEnd = dayjs()
-      .set("hour", 19)
-      .set("minute", 30)
-      .set("second", 0); // 7:30 PM
-    const saturdayStart = dayjs()
-      .set("hour", 10)
-      .set("minute", 0)
-      .set("second", 0); // 10:00 AM
-    const saturdayEnd = dayjs()
-      .set("hour", 14)
-      .set("minute", 0)
-      .set("second", 0); // 12:00 PM
-    const sundayStart = dayjs()
-      .set("hour", 10)
-      .set("minute", 0)
-      .set("second", 0); // 10:00 AM
-    const sundayEnd = dayjs()
-      .set("hour", 17)
-      .set("minute", 30)
-      .set("second", 0); // 4:00 PM
+    console.log("Current Day:", currentDay);
+    console.log("Current Time:", currentTime.format("YYYY-MM-DD HH:mm"));
 
-    // Log the current time
-    //console.log("Current Time:", currentTime.format("YYYY-MM-DD HH:mm:ss"));
+    // Find today's hours
+    const todayHours = operatingHours.find((hours) => hours.day === currentDay);
+    console.log("Today's Operating Hours:", todayHours);
 
-    if (currentDay >= 1 && currentDay <= 5) {
-      // Monday-Friday
-      const isOpen =
-        currentTime.isAfter(weekdayStart) && currentTime.isBefore(weekdayEnd);
-      tooltip: `Weekday Hours: ${weekdayStart.format(
-        "hh:mm A"
-      )} - ${weekdayEnd.format("hh:mm A")}`;
-
-      return isOpen;
-    } else if (currentDay === 6) {
-      // Saturday
-      const isOpen =
-        currentTime.isAfter(saturdayStart) && currentTime.isBefore(saturdayEnd);
-
-      return {
-        isOpen: false,
-        tooltip: "The MP is currently ",
-      };
-    } else if (currentDay === 0) {
-      // Sunday
-      const isOpen =
-        currentTime.isAfter(sundayStart) && currentTime.isBefore(sundayEnd);
-
-      return {
-        isOpen: false,
-        tooltip: "The MP is currently ",
-      };
+    if (!todayHours) {
+      console.error("No operating hours found for today.");
+      return " "; // Default to closed if no hours are found
     }
-    return false; // Default to closed if none of the conditions match
+
+    if (!todayHours.startTime || !todayHours.endTime) {
+      console.error(
+        "Invalid startTime or endTime in today's operating hours:",
+        todayHours
+      );
+      return " "; // Default to closed if data is missing
+    }
+
+    // Construct full date-time strings for parsing
+    const todayDate = dayjs().format("YYYY-MM-DD"); // Current date in YYYY-MM-DD format
+    const startTime = dayjs(`${todayDate}T${todayHours.startTime}`);
+    const endTime = dayjs(`${todayDate}T${todayHours.endTime}`);
+
+    if (!startTime.isValid() || !endTime.isValid()) {
+      console.error("Parsed startTime or endTime is invalid:", {
+        startTime: todayHours.startTime,
+        endTime: todayHours.endTime,
+      });
+      return " "; // Default to closed if parsing fails
+    }
+
+    console.log("Start Time:", startTime.format("YYYY-MM-DD HH:mm"));
+    console.log("End Time:", endTime.format("YYYY-MM-DD HH:mm"));
+
+    const isOpen =
+      currentTime.isAfter(startTime) && currentTime.isBefore(endTime);
+    console.log("Marketplace Open Status:", isOpen);
+
+    return isOpen;
   };
 
-  const [isOpen, setIsOpen] = useState(isMarketplaceOpen());
-  const [modalOpen, setModalOpen] = useState(false);
-
+  // Periodically check if the marketplace is open
   useEffect(() => {
     const intervalId = setInterval(() => {
       const status = isMarketplaceOpen();
       setIsOpen(status);
+      console.log("Updated Marketplace Open Status:", status);
+    }, 60000); // Check every minute
 
-      // Log the current open/closed status
-      //console.log(`Marketplace is now: ${status ? "Open" : "Closed"}`);
-    }, 1000); // Update every second
+    // Initial check
+    const initialStatus = isMarketplaceOpen();
+    setIsOpen(initialStatus);
+    //console.log("Initial Marketplace Open Status:", initialStatus);
 
-    return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, []);
+    return () => {
+      console.log("Clearing interval for checking marketplace status.");
+      clearInterval(intervalId);
+    };
+  }, [operatingHours]);
 
   useEffect(() => {
     if (new Date().getDay() === dayToFetch) {
@@ -392,14 +401,13 @@ export default function Menu({
             <h2 className="section-title">Marketplace Menu</h2>
 
             <p
-              
               style={{
                 color: isOpen ? "green" : "red",
                 fontWeight: "bold",
                 fontSize: "16px",
               }}
             >
-              {isOpen ? "OPEN" : "CLOSED"}
+              {isOpen ? "🟢 OPEN" : "🔴 CLOSED"}
             </p>
           </div>
         </div>
@@ -519,7 +527,8 @@ export default function Menu({
                           className="text text-center my-4"
                           style={{ color: "rgba(252,114,76,255)" }}
                         >
-                          Food item not found!
+                          Food item not found! Try searching for a{" "}
+                          <b>keywords</b> like "chicken" or "tofu".
                           {/* "No any found item found"  */}
                         </p>
                       )}

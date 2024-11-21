@@ -30,7 +30,7 @@ export default function Sidebar({
   const menuItems = [
     { name: "Menu", route: "/" },
     { name: "FAQ", route: "/faq" },
-    { name: "Busy", route: "/busy" },
+    { name: "Traffic", route: "/busy" },
   ];
   const studentItems = [
     "Student Dashboard",
@@ -46,6 +46,7 @@ export default function Sidebar({
     "Banner Timing",
     "Menu",
     "Add Menu Item",
+    "Operating Hours",
   ];
 
   const currentTabHandler = (index) => {

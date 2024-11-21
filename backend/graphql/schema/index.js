@@ -1,4 +1,4 @@
-const { buildSchema } = require('graphql');
+const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
 
@@ -111,6 +111,18 @@ input TextInput {
   userId: String!
 }
 
+type OperatingHours {
+  day: String!
+  startTime: String!
+  endTime: String!
+}
+
+input OperatingHoursInput {
+  day: String!
+  startTime: String!
+  endTime: String!
+}
+
 type RootQuery {
 
   getAllMenus: [Day!]!
@@ -130,6 +142,8 @@ type RootQuery {
 
   getAllTexts: [Text!]!
   getTextById(id: ID!): Text
+
+  getOperatingHours: [OperatingHours!]!
 
 }
 
@@ -154,6 +168,7 @@ type RootMutation {
 
   createText(textInput: TextInput): Text
   
+  updateOperatingHours(operatingHours: OperatingHoursInput!): OperatingHours!
 }
 
 schema {

@@ -126,7 +126,7 @@ export default function Navbar({ page }) {
                   className="nav-link page-scroll cursor-pointer"
                   onClick={() => navigate("/busy")}
                 >
-                  Busy
+                  Traffic
                 </a>
               </li>
               <a

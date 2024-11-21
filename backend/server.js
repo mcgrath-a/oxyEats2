@@ -3,18 +3,19 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const cors = require("cors");
-
 const bodyParser = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
 const mongoose = require("mongoose");
 
 const graphQlSchema = require("./graphql/schema/index");
 const graphQlResolvers = require("./graphql/resolvers/index");
-const { scrapeMenuData, customMenu } = require("./graphql/resolvers/fetchData");
+const { scrapeMenuData } = require("./graphql/resolvers/fetchData");
 
-dotenv.config();
+dotenv.config({ path: "./.env" });
 const app = express();
 const PORT = 5003;
+
+// Middleware
 app.use(
   cors({
     origin: "*",
@@ -23,6 +24,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
+// Scraping endpoint
 app.get("/scrape", async (req, res) => {
   try {
     res.json(await scrapeMenuData(req));
@@ -32,51 +34,36 @@ app.get("/scrape", async (req, res) => {
   }
 });
 
+// GraphQL endpoint
 app.use(
   "/graphql",
   graphqlHTTP({
     schema: graphQlSchema,
     rootValue: graphQlResolvers,
-    graphiql: process.env.DEBUG == "true" ? true : false,
+    graphiql: process.env.DEBUG === "true", // Enable GraphiQL in debug mode
   })
 );
+mongoUri =
+  "mongodb+srv://mcgratha:sC37EWQCl41rlnWG@oxyeats.6kfxnok.mongodb.net/test?retryWrites=true&w=majority";
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-// Check the MongoDB URI based on the environment mode
-if (process.env.DEBUG === "true") {
-  if (
-    !process.env.MONGO_URI_LOCAL.startsWith("mongodb://") &&
-    !process.env.MONGO_URI_LOCAL.startsWith("mongodb+srv://")
-  ) {
-    console.error("Local MongoDB URI is invalid.");
-  } else {
-    console.log("Connecting to MongoDB at:", process.env.MONGO_URI_LOCAL);
-  }
-} else {
-  if (
-    !process.env.MONGO_URI_PROD.startsWith("mongodb://") &&
-    !process.env.MONGO_URI_PROD.startsWith("mongodb+srv://")
-  ) {
-    console.error("Production MongoDB URI is invalid.");
-  } else {
-    console.log("Connecting to MongoDB at:", "Production URI Hidden");
-  }
+if (
+  !mongoUri ||
+  (!mongoUri.startsWith("mongodb://") && !mongoUri.startsWith("mongodb+srv://"))
+) {
+  console.log("Using MongoDB URI:", mongoUri);
+  console.error("MongoDB URI is invalid.");
+  process.exit(1); // Exit the application if the URI is invalid
 }
 
-// MongoDB Connection
-const uri =
-  "mongodb+srv://mcgratha:sC37EWQCl41rlnWG@oxyeats.6kfxnok.mongodb.net/NewDB?retryWrites=true&w=majority&appName=OxyEats";
 mongoose
-  .connect(uri)
+  .connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connection successful");
-    app.listen(3001, () =>
-      console.log("Server running on http://localhost:3001")
-    );
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
+    process.exit(1); // Exit the application if the connection fails
   });

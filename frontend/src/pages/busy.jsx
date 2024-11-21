@@ -102,6 +102,9 @@ export default function FAQ() {
               frameborder="0"
               scrol="no"
             ></iframe>
+            <p>
+              Dashboard thanks to Liv Gilber-Adler and Computer Science Club!
+            </p>
             <div style={{ marginTop: "20px" }}></div>
           </div>
         </div>
