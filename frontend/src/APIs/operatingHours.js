@@ -5,7 +5,7 @@ import {
 } from "../graphQlSchema/operatingHours";
 //import { backendUrl } from "../constants";
 
-export const backendUrl = "http://localhost:5003";
+export const backendUrl = "https://oxyeats2.onrender.com";
 
 export const getOperatingHours = async () => {
   const requestBody = {
