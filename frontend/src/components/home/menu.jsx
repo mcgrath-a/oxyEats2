@@ -194,7 +194,7 @@ export default function Menu({
 
   //console.log("Device Time:", new Date().toString());
   //console.log("Device Time in UTC:", new Date().toISOString());
-  
+
   // Determine if the marketplace is open based on operating hours
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -417,6 +417,10 @@ export default function Menu({
               {isOpen ? "🟢 OPEN" : "🔴 CLOSED"}
             </p>
           </div>
+          <p style={{ color: "grey", opacity: 0.5, paddingBottom: "0px" }}>
+            MP closed <span style={{ fontWeight: "bolder" }}>11/28-11/30</span>{" "}
+            for Thanksgiving holiday
+          </p>
         </div>
 
         {menus ? (
