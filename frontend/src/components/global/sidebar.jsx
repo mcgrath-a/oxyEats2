@@ -47,7 +47,7 @@ export default function Sidebar({
     "Banner Timing",
     "Add Menu Item",
     "Operating Hours",
-    "Admin Feedback"
+    "Admin Feedback",
   ];
 
   const currentTabHandler = (index) => {
@@ -104,9 +104,12 @@ export default function Sidebar({
             {menuItems.map((item, index) => (
               <div
                 key={index}
-                onClick={() => navigate(item.route)}
+                onClick={() => {
+                  setTab(index); // Update the active tab
+                  navigate(item.route); // Navigate to the corresponding route
+                }}
                 className={`cursor-pointer w-100 p-2 ${
-                  tab === index ? "bg-orange text-white" : "text-black"
+                  path === item.route ? "bg-orange text-white" : "text-black"
                 } text border-circular`}
               >
                 ⦿ {item.name}
@@ -114,6 +117,7 @@ export default function Sidebar({
             ))}
           </>
         ) : null}
+
         {path === "/student" && (
           <>
             <div

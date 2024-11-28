@@ -13,9 +13,9 @@ export default function FAQ() {
   const [studentItems, setStudentItems] = useState([
     "Student Dashboard",
     "Favorite Items",
-    "User Preferences",
     "Newsletter",
     "Feedback Form",
+    "User Preferences",
   ]);
 
   const [userDetails, setUserDetails] = useState(null);
@@ -29,9 +29,9 @@ export default function FAQ() {
       setStudentItems([
         "Student Dashboard",
         "Favorite Items",
-        "User Preferences",
         "Newsletter",
         "Feedback Form",
+        "User Preferences",
       ]);
     }
     if (credentials?.role == "Admin") {

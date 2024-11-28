@@ -90,7 +90,7 @@ const FavoriteTab = ({ ratings }) => {
                     <tr>
                         <th>No.</th>
                         <th>Food Name</th>
-                        <th>Ratings</th>
+                        <th>Ratings (out of 5)</th>
                     </tr>
                 </thead>
                 <tbody>

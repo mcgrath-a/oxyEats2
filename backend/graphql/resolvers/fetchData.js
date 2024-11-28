@@ -111,7 +111,7 @@ const scrapeMenuData = async (req) => {
     return menus;
   } else {
     const url =
-      "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace";
+      "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace/next-weeks-marketplace-menu";
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);

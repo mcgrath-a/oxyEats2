@@ -606,6 +606,7 @@ export default function Menu({
                       </div>
                     )}
                   </div>
+
                   <div
                     className="d-flex justify-content-center"
                     style={{ marginBottom: "1px" }} // Reduce margin below the button
@@ -631,122 +632,142 @@ export default function Menu({
                     style={{ maxWidth: "700px", width: "100%" }}
                     className=" my-5 text text-black mx-auto"
                   >
-                    {menus[dataIndex]?.data?.map((foodInfo, index) => (
-                      <>
-                        <div
-                          key={index}
-                          onClick={() =>
-                            openMenu.includes(index)
-                              ? setOpenMenu((prevOpenMenu) =>
-                                  prevOpenMenu.filter((item) => item !== index)
-                                )
-                              : setOpenMenu((prevStat) => [...prevStat, index])
-                          }
-                          className={`w-100 d-flex cursor-pointer justify-content-between border-circular ${
-                            openMenu.includes(index)
-                              ? "bg-orange text-white"
-                              : "bg-lightdark text-black"
-                          } align-items-center p-2 border-bottom border-secondary`}
-                        >
-                          <p
-                            className={`${
+                    {menus[dataIndex]?.data?.length > 0 ? (
+                      menus[dataIndex]?.data?.map((foodInfo, index) => (
+                        <>
+                          <div
+                            key={index}
+                            onClick={() =>
                               openMenu.includes(index)
-                                ? "text-white fs-20"
-                                : "text-black"
-                            } text `}
-                          >
-                            {foodInfo.meal}
-                          </p>
-
-                          {openMenu.includes(index) ? (
-                            <FaChevronUp className="cursor-pointer" />
-                          ) : (
-                            <FaChevronDown className="cursor-pointer" />
-                          )}
-                        </div>
-                        {openMenu.includes(index) && (
-                          <ul
-                            className="bg-lightorange p-3 border-circular"
-                            style={{
-                              paddingLeft: "20px",
-                              marginBottom: "15px",
-                            }}
-                          >
-                            {foodInfo.foods?.map((food, foodIndex) => (
-                              <li
-                                key={foodIndex}
-                                style={{
-                                  fontSize: "16px",
-                                  display: "flex !important",
-                                  alignItems: "start !important",
-                                }}
-                                className="d-flex align-items-center justify-content-between"
-                              >
-                                <span
-                                  style={
-                                    showFavorites
-                                      ? { width: "60%" }
-                                      : { width: "100%" }
-                                  }
-                                  dangerouslySetInnerHTML={{
-                                    __html: `○ <b>${food.split("-")[0]}</b>${
-                                      food.split("-")[1]
-                                        ? ` - ${food.split("-")[1]}`
-                                        : ""
-                                    }`,
-                                  }}
-                                ></span>
-                                {/* Rating System */}
-                                <div className="rating-system d-flex">
-                                  {/* Favorite Icon */}
-                                  {showFavorites ? (
-                                    favorites.includes(food) ? (
-                                      <FaHeart
-                                        onClick={() => toggleFavorite(food)}
-                                        style={{
-                                          color: "red",
-                                          cursor: "pointer",
-                                        }}
-                                      />
-                                    ) : (
-                                      <FaRegHeart
-                                        onClick={() => toggleFavorite(food)}
-                                        style={{ cursor: "pointer" }}
-                                      />
+                                ? setOpenMenu((prevOpenMenu) =>
+                                    prevOpenMenu.filter(
+                                      (item) => item !== index
                                     )
-                                  ) : null}
-                                  <div className="ml-3">
-                                    {showFavorites &&
-                                      [1, 2, 3, 4, 5].map((star) =>
-                                        ratings[food] >= star ? (
-                                          <FaStar
-                                            key={star}
-                                            onClick={() =>
-                                              handleRating(food, star)
-                                            }
-                                            style={{
-                                              color: "gold",
-                                              cursor: "pointer",
-                                            }}
-                                          />
-                                        ) : (
-                                          <FaRegStar
-                                            key={star}
-                                            onClick={() =>
-                                              handleRating(food, star)
-                                            }
-                                            style={{ cursor: "pointer" }}
-                                          />
-                                        )
-                                      )}
+                                  )
+                                : setOpenMenu((prevStat) => [
+                                    ...prevStat,
+                                    index,
+                                  ])
+                            }
+                            className={`w-100 d-flex cursor-pointer justify-content-between border-circular ${
+                              openMenu.includes(index)
+                                ? "bg-orange text-white"
+                                : "bg-lightdark text-black"
+                            } align-items-center p-2 border-bottom border-secondary`}
+                          >
+                            <p
+                              className={`${
+                                openMenu.includes(index)
+                                  ? "text-white fs-20"
+                                  : "text-black"
+                              } text `}
+                            >
+                              {foodInfo.meal}
+                            </p>
+
+                            {openMenu.includes(index) ? (
+                              <FaChevronUp className="cursor-pointer" />
+                            ) : (
+                              <FaChevronDown className="cursor-pointer" />
+                            )}
+                          </div>
+                          {openMenu.includes(index) && (
+                            <ul
+                              className="bg-lightorange p-3 border-circular"
+                              style={{
+                                paddingLeft: "20px",
+                                marginBottom: "15px",
+                              }}
+                            >
+                              {foodInfo.foods?.map((food, foodIndex) => (
+                                <li
+                                  key={foodIndex}
+                                  style={{
+                                    fontSize: "16px",
+                                    display: "flex !important",
+                                    alignItems: "start !important",
+                                  }}
+                                  className="d-flex align-items-center justify-content-between"
+                                >
+                                  <span
+                                    style={
+                                      showFavorites
+                                        ? { width: "60%" }
+                                        : { width: "100%" }
+                                    }
+                                    dangerouslySetInnerHTML={{
+                                      __html: `○ <b>${food.split("-")[0]}</b>${
+                                        food.split("-")[1]
+                                          ? ` - ${food.split("-")[1]}`
+                                          : ""
+                                      }`,
+                                    }}
+                                  />
+                                  {/* Rating System */}
+                                  <div className="rating-system d-flex">
+                                    {/* Favorite Icon */}
+                                    {showFavorites ? (
+                                      favorites.includes(food) ? (
+                                        <FaHeart
+                                          onClick={() => toggleFavorite(food)}
+                                          style={{
+                                            color: "red",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      ) : (
+                                        <FaRegHeart
+                                          onClick={() => toggleFavorite(food)}
+                                          style={{ cursor: "pointer" }}
+                                        />
+                                      )
+                                    ) : null}
+                                    <div className="ml-3">
+                                      {showFavorites &&
+                                        [1, 2, 3, 4, 5].map((star) =>
+                                          ratings[food] >= star ? (
+                                            <FaStar
+                                              key={star}
+                                              onClick={() =>
+                                                handleRating(food, star)
+                                              }
+                                              style={{
+                                                color: "gold",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                          ) : (
+                                            <FaRegStar
+                                              key={star}
+                                              onClick={() =>
+                                                handleRating(food, star)
+                                              }
+                                              style={{ cursor: "pointer" }}
+                                            />
+                                          )
+                                        )}
+                                    </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </>
-                    ))}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </>
+                      ))
+                    ) : (
+                      // Placeholder text when no menu is found
+                      <p
+                        style={{
+                          color: "red",
+                          textAlign: "center",
+                          fontWeight: "bold",
+                          fontSize: "16px",
+                        }}
+                      >
+                        No menu available for today. Please check the operating
+                        hours and check back later!
+                      </p>
+                    )}
                   </div>
                 </>
               )}
@@ -780,7 +801,7 @@ export default function Menu({
                           style={{ borderRadius: "40px" }}
                           onClick={() => {
                             setOpenMenu([0]);
-                            setDataIndex(menus.length - 7 + index); // asjust index based on slicing
+                            setDataIndex(menus.length - 7 + index); // Adjust index based on slicing
                           }}
                           className={`p-2 text-center day-option ${
                             dataIndex === menus.length - 7 + index
@@ -792,6 +813,7 @@ export default function Menu({
                         </div>
                       ))}
                   </div>
+
                   <div
                     className="d-flex justify-content-center"
                     style={{ marginBottom: "1px" }} // Reduce margin below the button
@@ -812,126 +834,147 @@ export default function Menu({
                       {allCollapsed ? "Expand All" : "Collapse All"}
                     </button>
                   </div>
+
                   <div
                     style={{ maxWidth: "700px", width: "100%" }}
                     className="my-5 text text-black mx-auto"
                   >
-                    {menus[dataIndex]?.data?.map((foodInfo, index) => (
-                      <>
-                        <div
-                          key={index}
-                          onClick={() => {
-                            openMenu.includes(index)
-                              ? setOpenMenu((prevOpenMenu) =>
-                                  prevOpenMenu.filter((item) => item !== index)
-                                )
-                              : setOpenMenu((prevStat) => [...prevStat, index]);
-                          }}
-                          className={`w-100 d-flex cursor-pointer justify-content-between border-circular ${
-                            openMenu.includes(index)
-                              ? "bg-orange text-white"
-                              : "bg-lightdark text-black"
-                          } align-items-center p-2 border-bottom border-secondary`}
-                        >
-                          <p
-                            className={`${
+                    {menus[dataIndex]?.data?.length > 0 ? (
+                      menus[dataIndex]?.data?.map((foodInfo, index) => (
+                        <>
+                          <div
+                            key={index}
+                            onClick={() => {
                               openMenu.includes(index)
-                                ? "text-white"
-                                : "text-black"
-                            } text `}
-                          >
-                            {foodInfo.meal}
-                          </p>
-
-                          {openMenu.includes(index) ? (
-                            <FaChevronUp className="cursor-pointer" />
-                          ) : (
-                            <FaChevronDown className="cursor-pointer" />
-                          )}
-                        </div>
-                        {openMenu.includes(index) && (
-                          <ul
-                            className="bg-lightorange p-3 border-circular"
-                            style={{
-                              paddingLeft: "20px",
-                              marginBottom: "15px",
-                            }}
-                          >
-                            {foodInfo.foods?.map((food, foodIndex) => (
-                              <li
-                                key={foodIndex}
-                                style={{
-                                  fontSize: "16px",
-                                  display: "flex !important",
-                                  alignItems: "start !important",
-                                }}
-                                className="d-flex align-items-center justify-content-between"
-                              >
-                                <span
-                                  style={
-                                    showFavorites
-                                      ? { width: "60%" }
-                                      : { width: "100%" }
-                                  }
-                                  dangerouslySetInnerHTML={{
-                                    __html: `○ <b>${food.split("-")[0]}</b>${
-                                      food.split("-")[1]
-                                        ? ` - ${food.split("-")[1]}`
-                                        : ""
-                                    }`,
-                                  }}
-                                />
-                                {/* Rating System */}
-                                <div className="rating-system d-flex">
-                                  {/* Favorite Icon */}
-                                  {showFavorites ? (
-                                    favorites.includes(food) ? (
-                                      <FaHeart
-                                        onClick={() => toggleFavorite(food)}
-                                        style={{
-                                          color: "red",
-                                          cursor: "pointer",
-                                        }}
-                                      />
-                                    ) : (
-                                      <FaRegHeart
-                                        onClick={() => toggleFavorite(food)}
-                                        style={{ cursor: "pointer" }}
-                                      />
+                                ? setOpenMenu((prevOpenMenu) =>
+                                    prevOpenMenu.filter(
+                                      (item) => item !== index
                                     )
-                                  ) : null}
-                                  <div className="ml-3">
-                                    {showFavorites &&
-                                      [1, 2, 3, 4, 5].map((star) =>
-                                        ratings[food] >= star ? (
-                                          <FaStar
-                                            key={star}
-                                            onClick={() =>
-                                              handleRating(food, star)
-                                            }
-                                            style={{
-                                              color: "gold",
-                                              cursor: "pointer",
-                                            }}
-                                          />
-                                        ) : (
-                                          <FaRegStar
-                                            key={star}
-                                            onClick={() =>
-                                              handleRating(food, star)
-                                            }
-                                            style={{ cursor: "pointer" }}
-                                          />
-                                        )
-                                      )}
+                                  )
+                                : setOpenMenu((prevStat) => [
+                                    ...prevStat,
+                                    index,
+                                  ]);
+                            }}
+                            className={`w-100 d-flex cursor-pointer justify-content-between border-circular ${
+                              openMenu.includes(index)
+                                ? "bg-orange text-white"
+                                : "bg-lightdark text-black"
+                            } align-items-center p-2 border-bottom border-secondary`}
+                          >
+                            <p
+                              className={`${
+                                openMenu.includes(index)
+                                  ? "text-white"
+                                  : "text-black"
+                              } text `}
+                            >
+                              {foodInfo.meal}
+                            </p>
+
+                            {openMenu.includes(index) ? (
+                              <FaChevronUp className="cursor-pointer" />
+                            ) : (
+                              <FaChevronDown className="cursor-pointer" />
+                            )}
+                          </div>
+                          {openMenu.includes(index) && (
+                            <ul
+                              className="bg-lightorange p-3 border-circular"
+                              style={{
+                                paddingLeft: "20px",
+                                marginBottom: "15px",
+                              }}
+                            >
+                              {foodInfo.foods?.map((food, foodIndex) => (
+                                <li
+                                  key={foodIndex}
+                                  style={{
+                                    fontSize: "16px",
+                                    display: "flex !important",
+                                    alignItems: "start !important",
+                                  }}
+                                  className="d-flex align-items-center justify-content-between"
+                                >
+                                  <span
+                                    style={
+                                      showFavorites
+                                        ? { width: "60%" }
+                                        : { width: "100%" }
+                                    }
+                                    dangerouslySetInnerHTML={{
+                                      __html: `○ <b>${food.split("-")[0]}</b>${
+                                        food.split("-")[1]
+                                          ? ` - ${food.split("-")[1]}`
+                                          : ""
+                                      }`,
+                                    }}
+                                  />
+                                  {/* Rating System */}
+                                  <div className="rating-system d-flex">
+                                    {/* Favorite Icon */}
+                                    {showFavorites ? (
+                                      favorites.includes(food) ? (
+                                        <FaHeart
+                                          onClick={() => toggleFavorite(food)}
+                                          style={{
+                                            color: "red",
+                                            cursor: "pointer",
+                                          }}
+                                        />
+                                      ) : (
+                                        <FaRegHeart
+                                          onClick={() => toggleFavorite(food)}
+                                          style={{ cursor: "pointer" }}
+                                        />
+                                      )
+                                    ) : null}
+                                    <div className="ml-3">
+                                      {showFavorites &&
+                                        [1, 2, 3, 4, 5].map((star) =>
+                                          ratings[food] >= star ? (
+                                            <FaStar
+                                              key={star}
+                                              onClick={() =>
+                                                handleRating(food, star)
+                                              }
+                                              style={{
+                                                color: "gold",
+                                                cursor: "pointer",
+                                              }}
+                                            />
+                                          ) : (
+                                            <FaRegStar
+                                              key={star}
+                                              onClick={() =>
+                                                handleRating(food, star)
+                                              }
+                                              style={{ cursor: "pointer" }}
+                                            />
+                                          )
+                                        )}
+                                    </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </>
-                    ))}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </>
+                      ))
+                    ) : (
+                      // Placeholder text when no menu is found for the week
+                      <p
+                        style={{
+                          color: "red",
+                          textAlign: "center",
+                          fontWeight: "bold",
+                          fontSize: "16px",
+                        }}
+                      >
+                        No menu available for today. Please check the operating
+                        hours and check back later!
+                      </p>
+                    )}
                   </div>
                 </>
               )}
