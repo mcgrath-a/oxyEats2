@@ -8,7 +8,11 @@ import {
   FaRegHeart,
   FaStar,
   FaRegStar,
+  FaFilePdf,
 } from "react-icons/fa6"; // Import star icons
+import { FaRegClock } from "react-icons/fa";
+import { IoMdClock } from "react-icons/io";
+import { TiExport } from "react-icons/ti";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -22,12 +26,11 @@ import { getFoodNames } from "../../utilities";
 import { getOperatingHours } from "../../APIs/operatingHours"; // Import operating hours API
 import { getBannerTiming } from "../../APIs/banner";
 import { scrapeMenus, fetchMenus, updateMenusApi } from "../../store/menuSlice";
-import { Button } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import MenuModal from "../global/menuModal";
 import { setCurrentTab } from "../../store/sidebarTabsSlice";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf"; // Import jsPDF
-import { FaFilePdf } from "react-icons/fa6"; // Import the PDF icon
 
 const dayToFetch = 0; // 0 is Sunday 6 is Saturday
 
@@ -55,6 +58,7 @@ export default function Menu({
   const [showBanner, setShowBanner] = useState(false);
   const [bannerMessage, setBannerMessage] = useState("");
   const [operatingHours, setOperatingHours] = useState([]); // State for operating hours
+  const [showModal, setShowModal] = useState(false); // State for modal visibility
   const [isOpen, setIsOpen] = useState(false);
   const [timing, setTiming] = useState({
     startTimeOne: "",
@@ -406,21 +410,21 @@ export default function Menu({
         <div className="features-text section-header text-center">
           <div>
             <h2 className="section-title">Marketplace Menu</h2>
-
             <p
               style={{
                 color: isOpen ? "green" : "red",
                 fontWeight: "bold",
                 fontSize: "16px",
               }}
+              title="MP Open or close status"
             >
               {isOpen ? "🟢 OPEN" : "🔴 CLOSED"}
             </p>
           </div>
-          <p style={{ color: "grey", opacity: 0.5, paddingBottom: "0px" }}>
+          {/* <p style={{ color: "grey", opacity: 0.5, paddingBottom: "0px" }}>
             MP closed <span style={{ fontWeight: "bolder" }}>11/28-11/30</span>{" "}
             for Thanksgiving holiday
-          </p>
+          </p> */}
         </div>
 
         {menus ? (
@@ -428,7 +432,98 @@ export default function Menu({
             <div className=" w-100 d-flex flex-col gap-2 border  p-2 border-circular">
               <div className="d-flex justify-content-end mt-2 mb-4 w-100">
                 <div className="w-100 d-flex justify-content-end my-2"></div>
+                <Button
+                  onClick={() => {
+                    console.log("Clock button clicked, opening modal...");
+                    setShowModal(true);
+                  }}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    //fontSize: "20px",
+                    padding: "4px",
+                    //marginRight: "10px",
+                  }}
+                  title="See operating hours"
+                  alt="See operating hours"
+                >
+                  <FaRegClock
+                    style={{ color: "lightblue", fontSize: "25px" }}
+                    title="See operating hours"
+                  />
+                </Button>
+                {/* Modal for displaying operating hours */}
+                <Modal isOpen={showModal} toggle={() => setShowModal(false)}>
+                  <ModalHeader toggle={() => setShowModal(false)}>
+                    Operating Hours
+                  </ModalHeader>
+                  <ModalBody>
+                    {operatingHours.length > 0 ? (
+                      <ul style={{ listStyleType: "none", padding: "0" }}>
+                        {[
+                          "Sunday",
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday",
+                        ].map((day) => {
+                          const hour = operatingHours.find(
+                            (h) => h.day === day
+                          );
+                          return (
+                            <li
+                              key={day}
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                padding: "8px 0",
+                                borderBottom: "1px solid #f0f0f0",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontWeight: "bold",
+                                  color: "#333",
+                                }}
+                              >
+                                {day}
+                              </span>
+                              <span
+                                style={{
+                                  color:
+                                    hour?.startTime === "00:00"
+                                      ? "red"
+                                      : "#333",
+                                }}
+                              >
+                                {hour
+                                  ? hour.startTime === "00:00" &&
+                                    hour.endTime === "00:00"
+                                    ? "Marketplace Closed"
+                                    : `${hour.startTime} - ${hour.endTime}`
+                                  : "No hours available"}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p>Loading operating hours...</p>
+                    )}
+                  </ModalBody>
 
+                  <ModalFooter>
+                    <Button
+                      color="secondary"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </Modal>
                 <button
                   onClick={generatePDF}
                   style={{
@@ -437,18 +532,22 @@ export default function Menu({
                     cursor: "pointer",
                     fontSize: "20px",
                     marginRight: "10px",
+                    padding: "0px",
                   }}
-                  title="Download Weekly Menu"
+                  title="Download the week's menu"
                 >
-                  <FaFilePdf style={{ color: "grey" }} />
+                  <TiExport
+                    style={{ color: "lightgrey", fontSize: "30px" }}
+                    title="Download the week's menu"
+                  />
                 </button>
-
                 <input
                   onKeyDown={handleKeyDown}
                   value={searchText}
                   onChange={(e) => setSearchText(e.target.value)}
                   className="searchInput border-circular"
                   placeholder="Search here"
+                  title="Type your text to search here"
                   type="text"
                 />
               </div>
@@ -457,6 +556,7 @@ export default function Menu({
                 className="w-100 d-flex justify-content-center align-items-center flex-row"
               >
                 <div
+                  title="Click to see day view"
                   onClick={() => {
                     setDuration("day");
                     setSearchText("");
@@ -470,6 +570,7 @@ export default function Menu({
                   DAY
                 </div>
                 <div
+                  title="Click to see week view"
                   onClick={() => {
                     setDuration("week");
                     setSearching(false);
@@ -613,6 +714,7 @@ export default function Menu({
                   >
                     <button
                       onClick={toggleAllMenus}
+                      title="Expand or closee sections"
                       style={{
                         backgroundColor: "transparent",
                         border: "none",
@@ -756,17 +858,107 @@ export default function Menu({
                       ))
                     ) : (
                       // Placeholder text when no menu is found
-                      <p
-                        style={{
-                          color: "red",
-                          textAlign: "center",
-                          fontWeight: "bold",
-                          fontSize: "16px",
-                        }}
-                      >
-                        No menu available for today. Please check the operating
-                        hours and check back later!
-                      </p>
+                      <div>
+                        {/* Placeholder text when no menu is found */}
+                        <p
+                          style={{
+                            color: "red",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: "16px",
+                          }}
+                        >
+                          No menu available for today. Please see{" "}
+                          <span
+                            style={{
+                              color: "blue",
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => setShowModal(true)}
+                          >
+                            operating hours
+                          </span>{" "}
+                          and check back later!
+                        </p>
+
+                        {/* Modal for displaying operating hours */}
+                        <Modal
+                          isOpen={showModal}
+                          toggle={() => setShowModal(false)}
+                        >
+                          <ModalHeader toggle={() => setShowModal(false)}>
+                            Operating Hours
+                          </ModalHeader>
+                          <ModalBody>
+                            {operatingHours.length > 0 ? (
+                              <ul
+                                style={{ listStyleType: "none", padding: "0" }}
+                              >
+                                {[
+                                  "Sunday",
+                                  "Monday",
+                                  "Tuesday",
+                                  "Wednesday",
+                                  "Thursday",
+                                  "Friday",
+                                  "Saturday",
+                                ].map((day) => {
+                                  const hour = operatingHours.find(
+                                    (h) => h.day === day
+                                  );
+                                  return (
+                                    <li
+                                      key={day}
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        padding: "8px 0",
+                                        borderBottom: "1px solid #f0f0f0",
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          fontWeight: "bold",
+                                          color: "#333",
+                                        }}
+                                      >
+                                        {day}
+                                      </span>
+                                      <span
+                                        style={{
+                                          color:
+                                            hour?.startTime === "00:00"
+                                              ? "red"
+                                              : "#333",
+                                        }}
+                                      >
+                                        {hour
+                                          ? hour.startTime === "00:00" &&
+                                            hour.endTime === "00:00"
+                                            ? "Marketplace Closed"
+                                            : `${hour.startTime} - ${hour.endTime}`
+                                          : "No hours available"}
+                                      </span>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            ) : (
+                              <p>Loading operating hours...</p>
+                            )}
+                          </ModalBody>
+
+                          <ModalFooter>
+                            <Button
+                              color="secondary"
+                              onClick={() => setShowModal(false)}
+                            >
+                              Close
+                            </Button>
+                          </ModalFooter>
+                        </Modal>
+                      </div>
                     )}
                   </div>
                 </>
@@ -971,8 +1163,8 @@ export default function Menu({
                           fontSize: "16px",
                         }}
                       >
-                        No menu available for today. Please check the operating
-                        hours and check back later!
+                        No menu available for today. Please see operating hours
+                        and check back later!
                       </p>
                     )}
                   </div>

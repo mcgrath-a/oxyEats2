@@ -98,7 +98,7 @@ export default function Navbar({ page }) {
 
         <div style={{ height: "75px" }} className="container">
           <a className="navbar-brand">
-            <img width={65} height={65} src="img/logo.png" alt="" />
+            <img width={65} height={65} src="img/logo.png" />
           </a>
           <button
             className="navbar-toggler"
@@ -108,6 +108,7 @@ export default function Navbar({ page }) {
             aria-controls="navbarCollapse"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            title="Toggle navigation bar"
           >
             <img src={"icons/menu.svg"} />
           </button>
@@ -153,6 +154,7 @@ export default function Navbar({ page }) {
                   <a
                     onClick={() => setLoginModal(true)}
                     className="btn btn-singin text-white"
+                    title="Log In to OxyEats"
                   >
                     Log In
                   </a>
@@ -223,7 +225,7 @@ export default function Navbar({ page }) {
         >
           <div className="d-flex align-items-center">
             <button onClick={handleSidebarToggle} className="navbar-toggler">
-              <HiMenuAlt1 className="text-white" style={{ fontSize: "30px" }} />
+              <HiMenuAlt1 className="text-white" style={{ fontSize: "30px" }}  title="Open side navigation bar" />
             </button>
             <a>
               <img width={60} height={60} src="img/logo.png" alt="" />
@@ -260,12 +262,14 @@ export default function Navbar({ page }) {
                   }}
                   onClick={() => setLoginModal(true)}
                   className="btn"
+                  title="Log In to OxyEats"
                 >
                   Log In
                 </a>
                 <a
                   onClick={() => setSignUpModal(true)}
                   className="btn btn-singin text-white"
+                  title="Sign Up for OxyEats"
                 >
                   Sign Up
                 </a>
