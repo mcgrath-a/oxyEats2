@@ -603,7 +603,7 @@ export default function Menu({
                               <p
                                 className="fs-17 my-1"
                                 dangerouslySetInnerHTML={{
-                                  __html: `○ <b>${data.item.split("-")[0]}</b>${
+                                  __html: `● <b>${data.item.split("-")[0]}</b>${
                                     data.item.split("-")[1]
                                       ? ` - ${data.item.split("-")[1]}`
                                       : ""
@@ -798,7 +798,7 @@ export default function Menu({
                                         : { width: "100%" }
                                     }
                                     dangerouslySetInnerHTML={{
-                                      __html: `○ <b>${food.split("-")[0]}</b>${
+                                      __html: `● <b>${food.split("-")[0]}</b>${
                                         food.split("-")[1]
                                           ? ` - ${food.split("-")[1]}`
                                           : ""
@@ -1095,7 +1095,7 @@ export default function Menu({
                                         : { width: "100%" }
                                     }
                                     dangerouslySetInnerHTML={{
-                                      __html: `○ <b>${food.split("-")[0]}</b>${
+                                      __html: `● <b>${food.split("-")[0]}</b>${
                                         food.split("-")[1]
                                           ? ` - ${food.split("-")[1]}`
                                           : ""
