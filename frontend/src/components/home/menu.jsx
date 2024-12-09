@@ -274,12 +274,12 @@ export default function Menu({
       dispatch(fetchMenus());
     }
   }, [dispatch]);
-
+//fix auto load
   useEffect(() => {
-    const index = menus.findIndex(
-      (obj) => new Date(obj.date).getDate() == new Date().getDate()
+    const index = menus.findIndex((obj) =>
+      dayjs(obj.date).isSame(dayjs(), "day")
     );
-    setDataIndex(index == -1 ? 6 : index);
+    setDataIndex(index === -1 ? 6 : index);
   }, [menus]);
 
   useEffect(() => {

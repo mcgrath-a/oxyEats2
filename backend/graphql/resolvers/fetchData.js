@@ -5,7 +5,6 @@ const { getAllSubscription } = require("../resolvers/subscription");
 const nodemailer = require("nodemailer");
 const MenuModal = require("../../models/menu");
 
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -109,7 +108,7 @@ const scrapeMenuData = async (req) => {
     return menus;
   } else {
     const url =
-      "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace/next-weeks-marketplace-menu";
+      "https://www.oxy.edu/student-life/campus-dining/where-eat/marketplace";
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
