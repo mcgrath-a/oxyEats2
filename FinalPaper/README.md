@@ -1,7 +1,5 @@
 # Final Paper Folder Structure
 
-This README provides a description of the contents in the Final Paper folder
-
 `assests`
 Contains static files like survey responses and diagrams
 
