@@ -1,3 +1,3 @@
-## About
+## Oxy Eats 
 
-to be continued..
+My COMP490 Project and paper. Enjoy!
